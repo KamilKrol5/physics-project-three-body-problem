@@ -16,7 +16,7 @@ public class Main extends Application {
         System.err.println(getClass().getResource("."));
         System.err.println(getClass().getClassLoader().getResource("."));
         //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/view_main.fxml"));
-        SimulationController simulationController = new SimulationController();
+        SimulationController simulationController = new SimulationController(4);
         Pane root = simulationController.getSimulationView();
         root.setPrefWidth(800);
         root.setPrefHeight(600);
