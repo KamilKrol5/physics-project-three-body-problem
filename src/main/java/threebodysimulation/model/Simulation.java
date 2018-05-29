@@ -2,20 +2,15 @@ package threebodysimulation.model;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class Simulation {
+    public static final double DEFAULT_GRAVITATIONAL_CONSTANT = 6.67408e-11;
+
     private ObservableList<Body> bodies = FXCollections.observableArrayList();
     public ObservableList<Body> getBodies() { return bodies; }
 
@@ -28,6 +23,10 @@ public class Simulation {
     public DoubleProperty GravitationalConstantProperty() { return gravitationalConstant; }
     public double getGravitationalConstant() { return gravitationalConstant.get(); }
     public void setGravitationalConstant(double newValue) { gravitationalConstant.setValue(newValue); }
+
+    public Simulation() {
+
+    }
 
     public Simulation(int numberOfBodies) {
         for (int i = 0; i < numberOfBodies; i++) {
@@ -60,32 +59,65 @@ public class Simulation {
         body.setPosition(body.getPosition().add(body.getVelocity().multiply(deltaTime)));
     }
 
+    private AnimationTimer animationTimer;
+    private boolean isAnimationRunning = false;
+    private boolean firstTick = true;
+
     public void start() {
-        AnimationTimer timer = new AnimationTimer() {
-            long lastUpdate;
-            final long fixedStep = 20000000;
-            final double fixedStepSeconds = fixedStep / 1e9;
-            long dt;
+        if (animationTimer == null) {
+            animationTimer = new AnimationTimer() {
+                long lastUpdate;
+                final long fixedStep = 20000000;
+                final double fixedStepSeconds = fixedStep / 1e9;
+                long dt;
 
-            @Override
-            public void handle(long now) {
-                dt += lastUpdate == 0 ? 0 : (now - lastUpdate);
-                System.err.format("frame delta time: %d, fixed steps: %d\n", now - lastUpdate, dt / fixedStep);
-                lastUpdate = now;
+                @Override
+                public void handle(long now) {
+                    dt += firstTick ? 0 : (now - lastUpdate);
+                    firstTick = false;
+                    System.err.format("frame delta time: %d, fixed steps: %d\n", now - lastUpdate, dt / fixedStep);
+                    lastUpdate = now;
 
-                while (dt >= fixedStep) {
-                    for (Body body : bodies) {
-                        updateVelocity(body, fixedStepSeconds);
+                    while (dt >= fixedStep) {
+                        for (Body body : bodies) {
+                            updateVelocity(body, fixedStepSeconds);
+                        }
+                        //System.err.println();
+                        for (Body body : bodies) {
+                            updatePosition(body, fixedStepSeconds);
+                            //System.err.println(body.getPosition());
+                        }
+                        dt -= fixedStep;
                     }
-                    //System.err.println();
-                    for (Body body : bodies) {
-                        updatePosition(body, fixedStepSeconds);
-                        //System.err.println(body.getPosition());
-                    }
-                    dt -= fixedStep;
                 }
-            }
-        };
-        timer.start();
+            };
+            firstTick = true;
+        }
+        isAnimationRunning = true;
+        animationTimer.start();
+    }
+
+    public void restart() {
+        if (animationTimer != null) {
+            animationTimer.stop();
+            animationTimer = null;
+        }
+        isAnimationRunning = true;
+        start();
+    }
+
+    public void pause() {
+        if (animationTimer != null)
+            animationTimer.stop();
+        isAnimationRunning = false;
+        firstTick = true;
+    }
+
+    public void pauseUnpause() {
+        if (isAnimationRunning) {
+            pause();
+        } else {
+            start();
+        }
     }
 }
