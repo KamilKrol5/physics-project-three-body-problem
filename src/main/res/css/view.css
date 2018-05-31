@@ -56,6 +56,9 @@
 .combo-box-popup .label{
 -fx-text-fill: black;
 }
+/*.combo-box .list-view{
+-fx-background-color: #8E9DFF;
+}*/
 /* slider */
 .slider .track{
 -fx-background-color: #BDC6FF;
