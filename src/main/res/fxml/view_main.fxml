@@ -1,8 +1,82 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<GridPane fx:controller="threebodysimulation.controller.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-</GridPane>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane stylesheets="/css/view.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="threebodysimulation.controller.Controller">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu text="_File">
+                    <items>
+                        <MenuItem fx:id="setDefaultPreferencesButton" text="Set _default preferences" onAction="#setDefaultPreferences"/>
+                        <MenuItem fx:id="exitButton" text="E_xit" onAction="#closeApplication"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="true" text="_View">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Set Background." onAction="#changeBackground"/>
+                    </items>
+                </Menu>
+                <Menu  text="_Help">
+                    <items>
+                        <MenuItem fx:id="aboutButton" text="_About" onAction="#showInfo"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <Pane fx:id="simulationPane" style="-fx-background-color: #2457AA" prefHeight="250" prefWidth="250"/>
+    </center>
+    <right>
+        <HBox>
+            <VBox fx:id="settingsMenu" prefHeight="250.0" prefWidth="150.0" BorderPane.alignment="CENTER" alignment="TOP_CENTER" spacing="6">
+                <padding ><Insets left="10" right="10" top="10" bottom="10"> </Insets> </padding>
+                <children>
+
+                    <Button fx:id="startButton" mnemonicParsing="false" prefWidth="110" text="START"/>
+                    <Button fx:id="stopButton" mnemonicParsing="false" prefWidth="110" text="STOP"/>
+                    <Separator  prefWidth="${settingsMenu.width}" />
+                    <Label prefHeight="17.0" prefWidth="${settingsMenu.width}" text="Speed: 100"/>
+                    <Slider/>
+                    <ComboBox fx:id="presetsBox" prefWidth="${settingsMenu.width}" promptText="Presets"/>
+                    <VBox fx:id="settingsMenuSubPanel" alignment="BOTTOM_CENTER" spacing="10">
+                        <Button fx:id="moreSettingsButton"  mnemonicParsing="false" prefWidth="110" text="MORE &gt;&gt;&gt;" onAction="#moreOnAction" />
+                    </VBox>
+
+                </children>
+            </VBox>
+            <ScrollPane fx:id="moreSettingsMenu" managed="${moreSettingsMenu.visible}" visible="false" prefHeight="250.0"
+                  prefWidth="200.0" BorderPane.alignment="CENTER" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" >
+                <content>
+                    <VBox>
+                    <VBox fx:id="moreSettingsMenuPanelWithBodies" spacing="0"  prefWidth="${moreSettingsMenu.width}" alignment="TOP_CENTER">
+                        <padding ><Insets left="25" right="25" top="10" bottom="0"> </Insets> </padding>
+
+                    </VBox>
+                        <HBox alignment="CENTER">
+                            <padding ><Insets left="25" right="25" top="0" bottom="10"> </Insets> </padding>
+                            <Button fx:id="addBodyButton" text="+" onAction="#addNewBody"></Button>
+                        </HBox>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </HBox>
+    </right>
+</BorderPane>

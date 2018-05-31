@@ -1,0 +1,57 @@
+/* buttons */
+.button{
+-fx-border-width: 2;
+-fx-padding: 6 20 6 20;
+-fx-background-radius:25;
+-fx-background-insets:0;
+-fx-border-color: transparent;
+-fx-font-weight: bold;
+-fx-background-color: #BDC6FF;
+/*-fx-background-color: #009AFF,                                     8E9DFF
+        linear-gradient( #B7C1FF 0%, #8495FF 50%, #7B87F0 51%, #5058A2 100%);*/
+}
+.button:focused{
+-fx-border-color: #4B59BA;
+-fx-border-width: 2;
+-fx-border-radius: 25;
+/*-fx-background-color: linear-gradient( #DDDDFF 1%, #8495FF 59%, #7B87F0 74%, #B7C1FF 99%);*/
+}
+.separator{
+    -fx-background: #2457AA;
+}
+/* scroll pane and scroll */
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.thumb{
+-fx-background-color: #BDC6FF;
+}
+/* combo box */
+.combo-box{
+-fx-background-color: #BDC6FF;
+}
+/*.combo-box .list-view{
+-fx-background-color: #8E9DFF;
+}*/
+/* slider */
+.slider .track{
+-fx-background-color: #BDC6FF;
+}
+.slider .thumb{
+-fx-border-radius:10;
+-fx-border-width: 2;
+-fx-border-color: #2457AA;
+-fx-background-color: #BDC6FF;
+}
+/* text fields */
+.text-field{
+-fx-background-color: #BDC6FF;
+}
+
