@@ -37,9 +37,25 @@
 .combo-box{
 -fx-background-color: #BDC6FF;
 }
-/*.combo-box .list-view{
+.combo-box-base:hover {
+-fx-background-color: #BDC6FF;
+}
+.combo-box .list-view{
 -fx-background-color: #8E9DFF;
-}*/
+}
+.combo-box-base .label{
+    -fx-text-fill: black;
+}
+.combo-box-popup .list-cell{
+-fx-background-color: #8E9DFF;
+-fx-text-fill: black;
+}
+.combo-box-popup .list-cell:hover{
+-fx-background-color: #BDC6FF;
+}
+.combo-box-popup .label{
+-fx-text-fill: black;
+}
 /* slider */
 .slider .track{
 -fx-background-color: #BDC6FF;

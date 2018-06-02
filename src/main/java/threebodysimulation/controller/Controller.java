@@ -22,7 +22,7 @@ public class Controller {
     public Button startButton;
     public Button stopButton;
     public VBox settingsMenuSubPanel;
-    public ComboBox presetsBox;
+    public ComboBox<String> presetsBox;
     public VBox moreSettingsMenuPanelWithBodies;
     public Button addBodyButton;
     private Background defaultSimulationPaneBackground= new Background(new BackgroundFill(Color.web("#2457AA"),null,null));
@@ -31,16 +31,17 @@ public class Controller {
     public MenuItem setDefaultPreferencesButton;
     public MenuItem aboutButton;
 
+
     public void initialize(){
         startButton.requestFocus();
         settingsMenu.setBackground(settingsMenusBackground);
         moreSettingsMenu.setBackground(settingsMenusBackground);
         //???
         settingsMenuSubPanel.prefHeightProperty().bind(settingsMenu.heightProperty());
-        presetsBox.getItems().addAll(new Label("dupa"), new Label("penis"));
-        addNewBodyToPanel("Kutangus", 400,200,2,4);
-        addNewBodyToPanel("Sraturn", 100,100,-8,9);
-        addNewBodyToPanel("Merkurwy", 500,300,-2,5);
+        presetsBox.getItems().addAll("preset1", "preset2","New preset...");
+        addNewBodyToPanel("Middle planet", 400,20,40,200,2,4);
+        addNewBodyToPanel("Small planet", 100,100,200,100,-8,9);
+        addNewBodyToPanel("Big planet", 500,300,110,300,-2,5);
 
     }
     public void moreOnAction() {
@@ -104,41 +105,77 @@ public class Controller {
 
     }
 
-    private void addNewBodyToPanel(String name, int mass, int velocityValue, int velocityX, int velocityY){
+    private void addNewBodyToPanel(String name, int mass, int x,int y,int velocityValue, int velocityX, int velocityY){
+        //add body to list of bodies
         amountOfBodies++;
         VBox bodyInfoVBox=new VBox();
         bodyInfoVBox.setSpacing(2);
+        bodyInfoVBox.setAlignment(Pos.TOP_CENTER);
         bodyInfoVBox.prefWidthProperty().bind(moreSettingsMenuPanelWithBodies.widthProperty());
         TextField nameField = new TextField();
         nameField.setStyle("-fx-background-color: #2457AA; -fx-text-fill: #FDFDFE; -fx-font-weight: bold;");
         nameField.setText(Integer.toString(amountOfBodies)+". "+name);
+        Button deleteBodyButton= new Button();
+        deleteBodyButton.setText("Delete this body");
+        deleteBodyButton.setOnAction((event)->{moreSettingsMenuPanelWithBodies.getChildren().remove(bodyInfoVBox); deleteBodyFromPanel();});
+        //---
+//        HBox nameBox=new HBox();
+//        nameBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
+//        nameBox.setAlignment(Pos.BASELINE_LEFT);
+//        nameBox.setSpacing(4);
+//        nameBox.getChildren().addAll(nameField,deleteBodyButton);
+        //---
         Label labelMass= new Label("Mass: ");
         TextField massField = new TextField();
         massField.setText(Integer.toString(mass));
         Label labelVelocityValue = new Label("Velocity value: ");
         TextField velocityValueField = new TextField();
         velocityValueField.setText(Integer.toString(velocityValue));
-        HBox velocityVectorCoordinatesHBox=new HBox();
-        velocityVectorCoordinatesHBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
-        velocityVectorCoordinatesHBox.setAlignment(Pos.BASELINE_RIGHT);
-        velocityVectorCoordinatesHBox.setSpacing(4);
+        HBox coordinatesHBox=new HBox();
+        coordinatesHBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
+        coordinatesHBox.setAlignment(Pos.BASELINE_RIGHT);
+        coordinatesHBox.setSpacing(4);
+        //---
+        Label velocityXLabel = new Label("velocity X:");
+        TextField velocityXField = new TextField();
+        velocityXField.setText(Integer.toString(velocityX));
+        velocityXField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(2));
+        Label velocityYLabel = new Label("velocity Y:");
+        TextField velocityYField = new TextField();
+        velocityYField.setText(Integer.toString(velocityY));
+        velocityYField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(2));
+        //---
+        HBox velocityXBox=new HBox();
+        velocityXBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
+        velocityXBox.setAlignment(Pos.BASELINE_RIGHT);
+        velocityXBox.setSpacing(4);
+        HBox velocityYBox=new HBox();
+        velocityYBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
+        velocityYBox.setAlignment(Pos.BASELINE_RIGHT);
+        velocityYBox.setSpacing(4);
+        //---
         Label labelX = new Label("X:");
         TextField xField = new TextField();
-        xField.setText(Integer.toString(velocityX));
+        xField.setText(Integer.toString(x));
         xField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(3));
         Label labelY = new Label("Y:");
         TextField yField = new TextField();
-        yField.setText(Integer.toString(velocityY));
+        yField.setText(Integer.toString(y));
         yField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(3));
         Separator separator = new Separator();
         separator.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
         separator.setPadding(new Insets(7,0,7,0));
-        velocityVectorCoordinatesHBox.getChildren().addAll(labelX,xField,labelY,yField);
-        bodyInfoVBox.getChildren().addAll(nameField,labelMass,massField,labelVelocityValue,velocityValueField,velocityVectorCoordinatesHBox,separator);
+        //---
+        velocityXBox.getChildren().addAll(velocityXLabel,velocityXField);
+        velocityYBox.getChildren().addAll(velocityYLabel,velocityYField);
+        coordinatesHBox.getChildren().addAll(labelX,xField,labelY,yField);
+        bodyInfoVBox.getChildren().addAll(nameField,labelMass,massField,labelVelocityValue,velocityValueField,coordinatesHBox,velocityXBox,velocityYBox,deleteBodyButton,separator);
         moreSettingsMenuPanelWithBodies.getChildren().add(bodyInfoVBox);
     }
-
+    public void deleteBodyFromPanel(){
+        amountOfBodies--;
+    }
     public void addNewBody(ActionEvent event) {
-        addNewBodyToPanel("name",1,0,0,0);
+        addNewBodyToPanel("name",1,10,10,0,0,0);
     }
 }

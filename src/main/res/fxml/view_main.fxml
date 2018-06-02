@@ -54,7 +54,7 @@
                     <Separator  prefWidth="${settingsMenu.width}" />
                     <Label prefHeight="17.0" prefWidth="${settingsMenu.width}" text="Speed: 100"/>
                     <Slider/>
-                    <ComboBox fx:id="presetsBox" prefWidth="${settingsMenu.width}" promptText="Presets"/>
+                    <ComboBox fx:id="presetsBox" prefWidth="${settingsMenu.width}" promptText="Presets" />
                     <VBox fx:id="settingsMenuSubPanel" alignment="BOTTOM_CENTER" spacing="10">
                         <Button fx:id="moreSettingsButton"  mnemonicParsing="false" prefWidth="110" text="MORE &gt;&gt;&gt;" onAction="#moreOnAction" />
                     </VBox>
