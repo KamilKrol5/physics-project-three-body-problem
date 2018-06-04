@@ -22,6 +22,9 @@ public class SimulationController {
     public SimulationView getSimulationView() {
         return simulationView;
     }
+    public Simulation getCurrentSimulation() {
+        return simulation;
+    }
 
     private final SimulationView simulationView;
 
@@ -41,18 +44,18 @@ public class SimulationController {
         if (simulation != null)
             simulation.pause();
         simulationView.reset(currentPreset.bodies.size());
-        simulation = initializeSimulation(currentPreset);
+        initializeSimulation(currentPreset);
         simulationView.bindBodiesPositions((Iterable<ObjectProperty<Point2D>>) simulation.getBodies().stream().map(Body::positionProperty)::iterator);
     }
 
-    private static Simulation initializeSimulation(Preset preset) {
-        Simulation simulation = new Simulation();
+    private void initializeSimulation(Preset preset) {
+        if (simulation == null)
+            simulation = new Simulation();
         simulation.setGravitationalConstant(preset.gravitationalConstant);
         simulation.setScale(preset.scale);
         List<Body> simulationBodies = simulation.getBodies();
+        simulationBodies.clear();
         preset.bodies.stream().map(Body::clone).forEach(simulationBodies::add);
-
-        return simulation;
     }
 
     public void loadPreset(Preset preset) {

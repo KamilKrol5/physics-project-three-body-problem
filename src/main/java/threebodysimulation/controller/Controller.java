@@ -3,6 +3,7 @@ package threebodysimulation.controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -10,11 +11,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import threebodysimulation.model.Body;
 
 import java.util.Optional;
 
 public class Controller {
-    private static int amountOfBodies=0;
     public ScrollPane moreSettingsMenu;
     public Button moreSettingsButton;
     public Pane simulationPane;
@@ -27,56 +28,63 @@ public class Controller {
     public Button addBodyButton;
     public Label speedLabel;
     public Slider speedSlider;
-    private Background defaultSimulationPaneBackground= new Background(new BackgroundFill(Color.web("#2457AA"),null,null));
-    private Background settingsMenusBackground=new Background(new BackgroundFill(Color.web("#7487FA"),null,null));
     public MenuItem exitButton;
     public MenuItem setDefaultPreferencesButton;
     public MenuItem aboutButton;
+    public BorderPane rootBorderPane;
+    private Background settingsMenusBackground = new Background(new BackgroundFill(Color.web("#7487FA"), null, null));
+    private Background defaultSimulationPaneBackground = new Background(new BackgroundFill(Color.web("#2457AA"), null, null));
 
+    public SimulationController simulationController;
 
-    public void initialize(){
+    public void initialize() {
         startButton.requestFocus();
         settingsMenu.setBackground(settingsMenusBackground);
         moreSettingsMenu.setBackground(settingsMenusBackground);
         //???
         settingsMenuSubPanel.prefHeightProperty().bind(settingsMenu.heightProperty());
-        presetsBox.getItems().addAll("preset1", "preset2","New preset...");
-        addNewBodyToPanel("Middle planet", 400,20,40,200,2,4);
-        addNewBodyToPanel("Small planet", 100,100,200,100,-8,9);
-        addNewBodyToPanel("Big planet", 500,300,110,300,-2,5);
+        presetsBox.getItems().addAll("preset1", "preset2", "New preset...");
+        addNewBodyToPanel("Middle planet", 400, 20, 40, 200, 2, 4);
+        addNewBodyToPanel("Small planet", 100, 100, 200, 100, -8, 9);
+        addNewBodyToPanel("Big planet", 500, 300, 110, 300, -2, 5);
         speedLabel.textProperty().bind(speedSlider.valueProperty().asString("Speed: %.0f"));
+        simulationController = new SimulationController();
+        rootBorderPane.setCenter(simulationController.getSimulationView());
+        simulationPane = simulationController.getSimulationView();
+
+        simulationController.getCurrentSimulation().timeScaleProperty().bind(speedSlider.valueProperty().divide(100));
     }
+
     public void moreOnAction() {
-        if(!moreSettingsMenu.isVisible()){
+        if (!moreSettingsMenu.isVisible()) {
             moreSettingsMenu.setVisible(true);
             moreSettingsButton.setText("<<< LESS");
-        }
-        else {
+        } else {
             moreSettingsMenu.setVisible(false);
             moreSettingsButton.setText("MORE >>>");
         }
-        if(!((Stage)moreSettingsMenu.getScene().getWindow()).isMaximized()){
+        if (!((Stage) moreSettingsMenu.getScene().getWindow()).isMaximized()) {
             moreSettingsMenu.getScene().getWindow().sizeToScene();
         }
 
     }
 
     public void changeBackground() {
-        final Alert alert= new Alert(Alert.AlertType.NONE);
+        final Alert alert = new Alert(Alert.AlertType.NONE);
         final FlowPane pickerContainer = new FlowPane(20, 20);
-        final ColorPicker colorPicker=new ColorPicker();
-        final Circle colorCircle=new Circle(50);
-        colorPicker.setValue((Color)simulationPane.getBackground().getFills().get(0).getFill());
+        final ColorPicker colorPicker = new ColorPicker();
+        final Circle colorCircle = new Circle(50);
+        colorPicker.setValue((Color) simulationPane.getBackground().getFills().get(0).getFill());
         alert.setTitle("Setting background");
         alert.setHeaderText("Pick new background color");
         colorCircle.fillProperty().bind(colorPicker.valueProperty());
-        pickerContainer.getChildren().addAll(colorCircle,colorPicker);
+        pickerContainer.getChildren().addAll(colorCircle, colorPicker);
         alert.getDialogPane().setContent(pickerContainer);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
-        alert.getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
-        Optional<ButtonType> optional=alert.showAndWait();
-        if(optional.isPresent() && optional.get().equals(ButtonType.OK)){
-            Background newSimulationPaneBackground= new Background(new BackgroundFill(colorPicker.getValue(),null,null));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
+        alert.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> optional = alert.showAndWait();
+        if (optional.isPresent() && optional.get().equals(ButtonType.OK)) {
+            Background newSimulationPaneBackground = new Background(new BackgroundFill(colorPicker.getValue(), null, null));
             simulationPane.setBackground(newSimulationPaneBackground);
         }
     }
@@ -92,40 +100,42 @@ public class Controller {
     public void showInfo() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("About");
-        Label contentText=new Label();
+        Label contentText = new Label();
         contentText.setTextFill(Color.WHITE);
         contentText.setText("Three-body problem simulation.\n" +
                 "Authors:\nVersion: 1.0\n'some text'");
-        Pane dialogPane=new Pane();
-        dialogPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        alert.getDialogPane().setBackground(new Background( new BackgroundImage(new Image("/code/milky_way_free.jpg"),BackgroundRepeat.REPEAT,BackgroundRepeat.REPEAT,BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        Pane dialogPane = new Pane();
+        dialogPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+        alert.getDialogPane().setBackground(new Background(new BackgroundImage(new Image("/code/milky_way_free.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         dialogPane.getChildren().addAll(contentText);
         alert.getDialogPane().setContent(dialogPane);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
         alert.getButtonTypes().addAll(ButtonType.OK);
         alert.show();
 
     }
 
-    private void addNewBodyToPanel(String name, int mass, int x,int y,int velocityValue, int velocityX, int velocityY){
+    private void addNewBodyToPanel(String name, int mass, int x, int y, int velocityValue, int velocityX, int velocityY) {
         //add body to list of bodies
-        amountOfBodies++;
-        VBox bodyInfoVBox=new VBox();
+        VBox bodyInfoVBox = new VBox();
         bodyInfoVBox.setSpacing(2);
         bodyInfoVBox.setAlignment(Pos.TOP_CENTER);
         bodyInfoVBox.prefWidthProperty().bind(moreSettingsMenuPanelWithBodies.widthProperty());
         TextField nameField = new TextField();
         nameField.setStyle("-fx-background-color: #2457AA; -fx-text-fill: #FDFDFE; -fx-font-weight: bold;");
-        nameField.setText(Integer.toString(amountOfBodies)+". "+name);
-        Button deleteBodyButton= new Button();
+        nameField.setText(name);
+        Button deleteBodyButton = new Button();
         deleteBodyButton.setText("Delete this body");
-        deleteBodyButton.setOnAction((event)->{moreSettingsMenuPanelWithBodies.getChildren().remove(bodyInfoVBox); deleteBodyFromPanel();});
+        deleteBodyButton.setOnAction((event) -> {
+            moreSettingsMenuPanelWithBodies.getChildren().remove(bodyInfoVBox);
+            deleteBodyFromPanel();
+        });
         //---
-        Label labelMass= new Label("Mass: ");
+        Label labelMass = new Label("Mass: ");
         TextField massField = new TextField();
         massField.setText(Integer.toString(mass));
-        Label positonLabel = new Label("Position: ");
-        HBox coordinatesHBox=new HBox();
+        Label positionLabel = new Label("Position: ");
+        HBox coordinatesHBox = new HBox();
         coordinatesHBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
         coordinatesHBox.setAlignment(Pos.BASELINE_LEFT);
         coordinatesHBox.setSpacing(4);
@@ -142,11 +152,11 @@ public class Controller {
         velocityYField.setText(Integer.toString(velocityY));
         velocityYField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(2));
         //---
-        HBox velocityXBox=new HBox();
+        HBox velocityXBox = new HBox();
         velocityXBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
         velocityXBox.setAlignment(Pos.BASELINE_RIGHT);
         velocityXBox.setSpacing(4);
-        HBox velocityYBox=new HBox();
+        HBox velocityYBox = new HBox();
         velocityYBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
         velocityYBox.setAlignment(Pos.BASELINE_RIGHT);
         velocityYBox.setSpacing(4);
@@ -161,16 +171,16 @@ public class Controller {
         yField.prefWidthProperty().bind(bodyInfoVBox.widthProperty().divide(3));
         Separator separator = new Separator();
         separator.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
-        separator.setPadding(new Insets(7,0,7,0));
+        separator.setPadding(new Insets(7, 0, 7, 0));
         //---
-        velocityXBox.getChildren().addAll(velocityXLabel,velocityXField);
-        velocityYBox.getChildren().addAll(velocityYLabel,velocityYField);
-        coordinatesHBox.getChildren().addAll(labelX,xField,labelY,yField);
+        velocityXBox.getChildren().addAll(velocityXLabel, velocityXField);
+        velocityYBox.getChildren().addAll(velocityYLabel, velocityYField);
+        coordinatesHBox.getChildren().addAll(labelX, xField, labelY, yField);
         bodyInfoVBox.getChildren().addAll(
                 nameField,
                 labelMass,
                 massField,
-                positonLabel,
+                positionLabel,
                 coordinatesHBox,
                 labelVelocityValue,
                 velocityValueField,
@@ -180,10 +190,38 @@ public class Controller {
                 separator);
         moreSettingsMenuPanelWithBodies.getChildren().add(bodyInfoVBox);
     }
-    public void deleteBodyFromPanel(){
-        amountOfBodies--;
+
+    public void deleteBodyFromPanel() {
     }
+
     public void addNewBody(ActionEvent event) {
-        addNewBodyToPanel("name",1,10,10,0,0,0);
+        addNewBodyToPanel("name", 1, 10, 10, 0, 0, 0);
+    }
+
+    private static SimulationController.Preset defaultPreset() {
+        final double vel = 1e1;
+        final Point2D offset = new Point2D(100, 100);
+        return new SimulationController.Preset(
+                new Body(new Point2D(0, 0).add(offset), new Point2D(vel, -vel)),
+                new Body(new Point2D(200, 0).add(offset), new Point2D(vel, vel)),
+                new Body(new Point2D(200, 200).add(offset), new Point2D(-vel, vel)),
+                new Body(new Point2D(0, 200).add(offset), new Point2D(-vel, -vel))
+        );
+    }
+
+    public void stopSimulation() {
+        startButton.setText("START");
+        simulationController.loadPreset(defaultPreset());
+        speedSlider.valueProperty().unbind();
+    }
+
+    public void startPauseSimulation() {
+        if (simulationController.getCurrentSimulation().isAnimationRunning()) {
+            startButton.setText("START");
+            simulationController.getCurrentSimulation().pause();
+        } else {
+            startButton.setText("PAUSE");
+            simulationController.start();
+        }
     }
 }

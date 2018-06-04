@@ -10,6 +10,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 
 public class SimulationView extends Pane {
@@ -17,6 +18,10 @@ public class SimulationView extends Pane {
     public SimulationView() {
         super();
         setBackground(new Background(new BackgroundFill(Color.CYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(this.widthProperty());
+        clip.heightProperty().bind(this.heightProperty());
+        setClip(clip);
     }
 
     public SimulationView(int numberOfBodies) {

@@ -15,14 +15,19 @@ public class Simulation {
     public ObservableList<Body> getBodies() { return bodies; }
 
     private DoubleProperty scale = new SimpleDoubleProperty(this, "scale", 1);
-    public DoubleProperty ScaleProperty() { return scale; }
+    public DoubleProperty scaleProperty() { return scale; }
     public double getScale() { return scale.get(); }
     public void setScale(double newValue) { scale.setValue(newValue); }
 
     private DoubleProperty gravitationalConstant = new SimpleDoubleProperty(this, "gravitationalConstant", 6.67408e-11);
-    public DoubleProperty GravitationalConstantProperty() { return gravitationalConstant; }
+    public DoubleProperty gravitationalConstantProperty() { return gravitationalConstant; }
     public double getGravitationalConstant() { return gravitationalConstant.get(); }
     public void setGravitationalConstant(double newValue) { gravitationalConstant.setValue(newValue); }
+
+    private DoubleProperty timeScale = new SimpleDoubleProperty(this, "timeScale", 1.0);
+    public DoubleProperty timeScaleProperty() { return timeScale; }
+    public double getTimeScale() { return timeScale.get(); }
+    public void setTimeScale(double newValue) { timeScale.setValue(newValue); }
 
     public Simulation() {
 
@@ -63,6 +68,10 @@ public class Simulation {
     private boolean isAnimationRunning = false;
     private boolean firstTick = true;
 
+    public boolean isAnimationRunning() {
+        return isAnimationRunning;
+    }
+
     public void start() {
         if (animationTimer == null) {
             animationTimer = new AnimationTimer() {
@@ -73,7 +82,7 @@ public class Simulation {
 
                 @Override
                 public void handle(long now) {
-                    dt += firstTick ? 0 : (now - lastUpdate);
+                    dt += firstTick ? 0 : ((now - lastUpdate) * getTimeScale());
                     firstTick = false;
                     System.err.format("frame delta time: %d, fixed steps: %d\n", now - lastUpdate, dt / fixedStep);
                     lastUpdate = now;
