@@ -25,6 +25,8 @@ public class Controller {
     public ComboBox<String> presetsBox;
     public VBox moreSettingsMenuPanelWithBodies;
     public Button addBodyButton;
+    public Label speedLabel;
+    public Slider speedSlider;
     private Background defaultSimulationPaneBackground= new Background(new BackgroundFill(Color.web("#2457AA"),null,null));
     private Background settingsMenusBackground=new Background(new BackgroundFill(Color.web("#7487FA"),null,null));
     public MenuItem exitButton;
@@ -42,7 +44,7 @@ public class Controller {
         addNewBodyToPanel("Middle planet", 400,20,40,200,2,4);
         addNewBodyToPanel("Small planet", 100,100,200,100,-8,9);
         addNewBodyToPanel("Big planet", 500,300,110,300,-2,5);
-
+        speedLabel.textProperty().bind(speedSlider.valueProperty().asString("Speed: %.0f"));
     }
     public void moreOnAction() {
         if(!moreSettingsMenu.isVisible()){
@@ -119,23 +121,18 @@ public class Controller {
         deleteBodyButton.setText("Delete this body");
         deleteBodyButton.setOnAction((event)->{moreSettingsMenuPanelWithBodies.getChildren().remove(bodyInfoVBox); deleteBodyFromPanel();});
         //---
-//        HBox nameBox=new HBox();
-//        nameBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
-//        nameBox.setAlignment(Pos.BASELINE_LEFT);
-//        nameBox.setSpacing(4);
-//        nameBox.getChildren().addAll(nameField,deleteBodyButton);
-        //---
         Label labelMass= new Label("Mass: ");
         TextField massField = new TextField();
         massField.setText(Integer.toString(mass));
+        Label positonLabel = new Label("Position: ");
+        HBox coordinatesHBox=new HBox();
+        coordinatesHBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
+        coordinatesHBox.setAlignment(Pos.BASELINE_LEFT);
+        coordinatesHBox.setSpacing(4);
+        //---
         Label labelVelocityValue = new Label("Velocity value: ");
         TextField velocityValueField = new TextField();
         velocityValueField.setText(Integer.toString(velocityValue));
-        HBox coordinatesHBox=new HBox();
-        coordinatesHBox.prefWidthProperty().bind(bodyInfoVBox.widthProperty());
-        coordinatesHBox.setAlignment(Pos.BASELINE_RIGHT);
-        coordinatesHBox.setSpacing(4);
-        //---
         Label velocityXLabel = new Label("velocity X:");
         TextField velocityXField = new TextField();
         velocityXField.setText(Integer.toString(velocityX));
@@ -169,7 +166,18 @@ public class Controller {
         velocityXBox.getChildren().addAll(velocityXLabel,velocityXField);
         velocityYBox.getChildren().addAll(velocityYLabel,velocityYField);
         coordinatesHBox.getChildren().addAll(labelX,xField,labelY,yField);
-        bodyInfoVBox.getChildren().addAll(nameField,labelMass,massField,labelVelocityValue,velocityValueField,coordinatesHBox,velocityXBox,velocityYBox,deleteBodyButton,separator);
+        bodyInfoVBox.getChildren().addAll(
+                nameField,
+                labelMass,
+                massField,
+                positonLabel,
+                coordinatesHBox,
+                labelVelocityValue,
+                velocityValueField,
+                velocityXBox,
+                velocityYBox,
+                deleteBodyButton,
+                separator);
         moreSettingsMenuPanelWithBodies.getChildren().add(bodyInfoVBox);
     }
     public void deleteBodyFromPanel(){

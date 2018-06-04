@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
-<BorderPane stylesheets="/css/view.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<BorderPane stylesheets="/css/view.css" prefWidth="900" prefHeight="500"
             xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="threebodysimulation.controller.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -52,8 +52,8 @@
                     <Button fx:id="startButton" mnemonicParsing="false" prefWidth="110" text="START"/>
                     <Button fx:id="stopButton" mnemonicParsing="false" prefWidth="110" text="STOP"/>
                     <Separator  prefWidth="${settingsMenu.width}" />
-                    <Label prefHeight="17.0" prefWidth="${settingsMenu.width}" text="Speed: 100"/>
-                    <Slider/>
+                    <Label fx:id="speedLabel" prefHeight="17.0" prefWidth="${settingsMenu.width}" text="Speed: 100"/>
+                    <Slider fx:id="speedSlider"/>
                     <ComboBox fx:id="presetsBox" prefWidth="${settingsMenu.width}" promptText="Presets" />
                     <VBox fx:id="settingsMenuSubPanel" alignment="BOTTOM_CENTER" spacing="10">
                         <Button fx:id="moreSettingsButton"  mnemonicParsing="false" prefWidth="110" text="MORE &gt;&gt;&gt;" onAction="#moreOnAction" />
