@@ -1,7 +1,9 @@
 package threebodysimulation.model;
 
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,11 +67,11 @@ public class Simulation {
     }
 
     private AnimationTimer animationTimer;
-    private boolean isAnimationRunning = false;
     private boolean firstTick = true;
-
+    private BooleanProperty animationRunning = new SimpleBooleanProperty(this, "animationRunning", false);
+    public BooleanProperty animationRunningProperty() { return animationRunning; }
     public boolean isAnimationRunning() {
-        return isAnimationRunning;
+        return animationRunning.get();
     }
 
     public void start() {
@@ -83,8 +85,8 @@ public class Simulation {
                 @Override
                 public void handle(long now) {
                     dt += firstTick ? 0 : ((now - lastUpdate) * getTimeScale());
+                    //System.err.println(bodies);
                     firstTick = false;
-                    System.err.format("frame delta time: %d, fixed steps: %d\n", now - lastUpdate, dt / fixedStep);
                     lastUpdate = now;
 
                     while (dt >= fixedStep) {
@@ -102,7 +104,7 @@ public class Simulation {
             };
             firstTick = true;
         }
-        isAnimationRunning = true;
+        animationRunning.set(true);
         animationTimer.start();
     }
 
@@ -111,19 +113,19 @@ public class Simulation {
             animationTimer.stop();
             animationTimer = null;
         }
-        isAnimationRunning = true;
+        animationRunning.set(true);
         start();
     }
 
     public void pause() {
         if (animationTimer != null)
             animationTimer.stop();
-        isAnimationRunning = false;
+        animationRunning.set(false);
         firstTick = true;
     }
 
     public void pauseUnpause() {
-        if (isAnimationRunning) {
+        if (animationRunning.get()) {
             pause();
         } else {
             start();

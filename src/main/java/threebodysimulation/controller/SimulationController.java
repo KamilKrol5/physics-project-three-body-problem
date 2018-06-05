@@ -1,6 +1,8 @@
 package threebodysimulation.controller;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
@@ -10,7 +12,6 @@ import threebodysimulation.model.Simulation;
 import threebodysimulation.view.SimulationView;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -100,8 +101,30 @@ public class SimulationController {
 
     public static class Preset implements Serializable, Cloneable {
         double gravitationalConstant;
+
+        public double getGravitationalConstant() {
+            return gravitationalConstant;
+        }
+
+        public void setGravitationalConstant(double gravitationalConstant) {
+            this.gravitationalConstant = gravitationalConstant;
+        }
+
         double scale;
-        List<Body> bodies;
+
+        public double getScale() {
+            return scale;
+        }
+
+        public void setScale(double scale) {
+            this.scale = scale;
+        }
+
+        ObservableList<Body> bodies;
+
+        public ObservableList<Body> getBodies() {
+            return bodies;
+        }
 
         public Preset() {
             this(Simulation.DEFAULT_GRAVITATIONAL_CONSTANT);
@@ -135,12 +158,12 @@ public class SimulationController {
             this.gravitationalConstant = gravitationalConstant;
             this.scale = scale;
             if (bodies != null) {
-                this.bodies = new ArrayList<>(bodies.size());
+                this.bodies = FXCollections.observableArrayList();
                 for (Body body : bodies) {
                     this.bodies.add(body.clone());
                 }
             } else {
-                this.bodies = new ArrayList<>();
+                this.bodies = FXCollections.observableArrayList();
             }
         }
 

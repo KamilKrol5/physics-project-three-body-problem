@@ -18,7 +18,7 @@
                 </Menu>
                 <Menu mnemonicParsing="true" text="_View">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Set Background." onAction="#changeBackground"/>
+                        <MenuItem mnemonicParsing="false" text="Set Background" onAction="#changeBackground"/>
                     </items>
                 </Menu>
                 <Menu text="_Help">
@@ -67,7 +67,7 @@
                                 <Insets left="25" right="25" top="10" bottom="0"></Insets>
                             </padding>
                         </VBox>
-                        <HBox alignment="CENTER">
+                        <HBox fx:id="addBodyButtonBox" alignment="CENTER">
                             <padding>
                                 <Insets left="25" right="25" top="0" bottom="10"></Insets>
                             </padding>
