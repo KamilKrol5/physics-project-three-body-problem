@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import threebodysimulation.Main;
@@ -53,18 +54,10 @@ public class Controller {
         settingsMenuSubPanel.prefHeightProperty().bind(settingsMenu.heightProperty());
         //---presets---
         SimulationController.Preset defaultPreset = defaultPreset();
-        Body body1 = new Body(200, 0, 40*Math.cos(Math.toRadians(-45)), 40*Math.sin(Math.toRadians(-45)), 4.0e15);
-        Body body2 = new Body(200, 400, 40*Math.cos(Math.toRadians(135)), 40*Math.sin(Math.toRadians(135)), 4.0e15);
-        Body body3 = new Body(212, 170, 2, 111, 5e16);
-        SimulationController.Preset testPreset = defaultPreset();
-        testPreset.getBodies().addAll(body1,body2);
-        //SimulationController.Preset randomPreset = new SimulationController.Preset(Simulation.DEFAULT_GRAVITATIONAL_CONSTANT, 1, randomBodies(3));
-        presets.put("default", defaultPreset);
-        presets.put("preset 1", testPreset);
         presetsBox.getItems().add("New preset...");
-        presetsBox.getItems().addAll(presets.keySet());
-        addRandomPreset(3,"3 random");
-        addRandomPreset(5,"5 random");
+        presets.put("default", defaultPreset);
+        addPresets();
+
         //---presets combo-box handler
         presetsBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             currentPresetName = newValue;
@@ -92,6 +85,58 @@ public class Controller {
         moreSettingsMenuPanelWithBodies.disableProperty().bind(simulationController.getCurrentSimulation().animationRunningProperty().or(needPresetReload));
         addBodyButtonBox.disableProperty().bind(simulationController.getCurrentSimulation().animationRunningProperty().or(needPresetReload));
         setDefaultPreferences();
+    }
+
+    private void addPresets() {
+        Body hexagonBody1 = new Body(200, 0, 40*Math.cos(Math.toRadians(-45)), 40*Math.sin(Math.toRadians(-45)), 4.0e15);
+        Body hexagonBody2 = new Body(200, 400, 40*Math.cos(Math.toRadians(135)), 40*Math.sin(Math.toRadians(135)), 4.0e15);
+        //Body body3 = new Body(212, 170, 2, 111, 5e16);
+        SimulationController.Preset hexagon = defaultPreset();
+        hexagon.getBodies().addAll(hexagonBody1,hexagonBody2);
+        //SimulationController.Preset randomPreset = new SimulationController.Preset(Simulation.DEFAULT_GRAVITATIONAL_CONSTANT, 1, randomBodies(3));
+        presetsBox.getItems().add("hexagon");
+        presets.put("hexagon", hexagon);
+        //
+        Body twoBodiesBody1 = new Body(550, 300, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
+        Body twoBodiesBody2 = new Body(350, 100, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+        SimulationController.Preset twoBodies = new SimulationController.Preset(twoBodiesBody1,twoBodiesBody2);
+        presetsBox.getItems().add("2 bodies");
+        presets.put("2 bodies", twoBodies);
+        //
+//        Body almostStableBody1 = new Body(450, 300, 10 * Math.cos(Math.toRadians(140)), 10 * Math.sin(Math.toRadians(140)), 5.0e16);
+//        Body almostStableBody2 = new Body(250, 100, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+//        Body almostStableBody3 = new Body(250, 130, 170*Math.cos(Math.toRadians(0)), 170*Math.sin(Math.toRadians(0)), 5.0e10);
+//        SimulationController.Preset almostStable = new SimulationController.Preset(almostStableBody1,almostStableBody2,almostStableBody3);
+//        presetsBox.getItems().add("almost stable");
+//        presets.put("almost stable", almostStable);
+        //
+        Body changeOrbitBody1 = new Body(550, 300, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
+        Body changeOrbitBody2 = new Body(350, 100, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+        Body changeOrbitBody3 = new Body(350, 130, 175*Math.cos(Math.toRadians(0)), 175*Math.sin(Math.toRadians(0)), 5.0e9);
+        SimulationController.Preset changeOrbit = new SimulationController.Preset(changeOrbitBody1,changeOrbitBody2,changeOrbitBody3);
+        presetsBox.getItems().add("change orbit");
+        presets.put("change orbit", changeOrbit);
+        //
+//        Body cometBody1 = new Body(450, 400, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
+//        Body cometBody2 = new Body(250, 200, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+//        Body cometBody3 = new Body(250, 230, 175*Math.cos(Math.toRadians(0)), 175*Math.sin(Math.toRadians(0)), 5.0e9);
+//        Body cometBody4 = new Body(50, 95, 4*Math.cos(Math.toRadians(1)), 4*Math.sin(Math.toRadians(1)), 5.0e15);
+//        SimulationController.Preset comet = new SimulationController.Preset(cometBody1,cometBody2,cometBody3,cometBody4);
+//        presetsBox.getItems().add("comet");
+//        presets.put("comet", comet);
+//        //
+//        Body negativeMass3Body1 = new Body(450, 350, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
+//        Body negativeMass3Body2 = new Body(250, 150, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+//        Body negativeMass3Body3 = new Body(250, 180, 175*Math.cos(Math.toRadians(0)), 175*Math.sin(Math.toRadians(0)), 5.0e9);
+//        Body negativeMass3Body4 = new Body(50, 50, 100*Math.cos(Math.toRadians(90)), 100*Math.sin(Math.toRadians(90)), 5.0e8);
+//        SimulationController.Preset negativeMass3 = new SimulationController.Preset(negativeMass3Body1,negativeMass3Body2,negativeMass3Body3,negativeMass3Body4);
+//        presetsBox.getItems().add("3");
+//        presets.put("3", negativeMass3);
+        //
+        //presetsBox.getItems().addAll(presets.keySet());
+        //random
+        addRandomPreset(3,"3 random");
+        addRandomPreset(5,"5 random");
     }
 
     private Collection<Body> randomBodies(int amount) {
@@ -151,24 +196,21 @@ public class Controller {
         presetsBox.getItems().add(nameOfPreset);
     }
 
-    public void showInfo() {
+    public void showAboutWindow() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("About");
         Label contentText = new Label();
         contentText.setTextFill(Color.WHITE);
-        contentText.setText("Three-body problem simulation.\n" +
-                "Authors:\n    Jakub Dąbek\n    Kamil Król\nVersion: 1.1\n"+
-                "Instructions:\n    " +
-                "Click start to start simulation on default preset.\n    " +
-                "There are some presets given from authors but also users can create \n    " +
-                "their own presets by clicking 'New preset...' and editing it.\n    " +
-                "For nice looking effects it may be needed to type a huge \n    " +
-                "mass instead of just some kilograms.\n    " +
-                "Notice that the velocity angle is in degrees not in radians.\n");
-        Pane dialogPane = new Pane();
+        contentText.setTextAlignment(TextAlignment.CENTER);
+        contentText.setText("\nThree-body problem simulation.\n\n" +
+                "Authors:\nJakub Dąbek\nKamil Król\n\n" +
+                "Version:\n1.1\n");
+        //contentText.setAlignment(Pos.BASELINE_CENTER);
+        VBox dialogPane = new VBox();
         dialogPane.setPrefSize(400, 200);
         dialogPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         alert.getDialogPane().setBackground(new Background(new BackgroundImage(new Image("milky_way_free.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        dialogPane.setAlignment(Pos.TOP_CENTER);
         dialogPane.getChildren().addAll(contentText);
         alert.getDialogPane().setContent(dialogPane);
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
@@ -254,11 +296,11 @@ public class Controller {
 
         body.massProperty().bind(Bindings.createDoubleBinding(() -> {
             Double value = textFormatter.valueProperty().getValue();
-            System.err.println(value);
+            //System.err.println(value);
             return value;
         }, textFormatter.valueProperty()));
         textFormatter.valueProperty().addListener((observable, oldValue, newValue) -> {
-            System.err.format("%s %s %s\n", oldValue, newValue, body.getMass());
+            //System.err.format("%s %s %s\n", oldValue, newValue, body.getMass());
         });
 
         //---position label---
@@ -438,5 +480,42 @@ public class Controller {
             needPresetReload.set(true);
             simulationController.start();
         }
+    }
+
+    public void showInfo(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("About");
+        Label contentText = new Label();
+        contentText.setTextFill(Color.BLACK);
+        contentText.setText("\nManual: \n\n" +
+                "Click 'start' to start simulation on default preset.\n" +
+                "Preset can be changed in box on menu panel.\n" +
+                "There are some presets given from authors but also users can create \n" +
+                "their own presets by clicking 'New preset...'. New presets can be edited\n" +
+                "in the panel on the right. In this panel existing bodies can be edited\n" +
+                "or deleted and new bodies can be added.\n\n" +
+                "Hints:\n" +
+                " ■ The velocity angle is in degrees not in radians.\n"+
+                " ■ For better looking effects it may be needed to set a huge mass.\n" +
+                " ■ User can use scientific notation.\n" +
+                " ■ Bodies added by user have random values.\n" +
+                " ■ Random presets are different for every launching of the program.\n" +
+                " ■ Presets can be changed only when simulation is paused or stopped.\n" +
+                " ■ Every body in current preset can be edited on the right panel\n" +
+                "only after stopping simulation. All typed changes will be seen\n" +
+                "after starting simulation.\n" +
+                " ■ Negative mass value is allowed. There is a preset showing that case.\n" +
+                " ■ If bodies get too close the force is so big that their velocity \n" +
+                "increases significantly. It may cause an effect of disappearing bodies.\n");
+        //🚽⚤☭●◉■💊🚑★☢★✦
+        Pane dialogPane = new Pane();
+        dialogPane.setPrefSize(405, 400);
+        //dialogPane.setBackground(new Background(new BackgroundFill(Color.web("#7487FA"), null, null)));
+        alert.getDialogPane().setBackground(new Background(new BackgroundFill(Color.web("#7487FA"), null, null)));
+        dialogPane.getChildren().addAll(contentText);
+        alert.getDialogPane().setContent(dialogPane);
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(threebodysimulation.Main.getIcon());
+        alert.getButtonTypes().addAll(ButtonType.OK);
+        alert.show();
     }
 }

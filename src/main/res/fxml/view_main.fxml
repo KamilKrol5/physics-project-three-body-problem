@@ -11,19 +11,20 @@
             <menus>
                 <Menu text="_File">
                     <items>
-                        <MenuItem fx:id="setDefaultPreferencesButton" text="Set _default preferences"
-                                  onAction="#setDefaultPreferences"/>
                         <MenuItem fx:id="exitButton" text="E_xit" onAction="#closeApplication"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="true" text="_View">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Set Background" onAction="#changeBackground"/>
+                        <MenuItem fx:id="setDefaultPreferencesButton" text="Set _default background"
+                                  onAction="#setDefaultPreferences"/>
                     </items>
                 </Menu>
                 <Menu text="_Help">
                     <items>
-                        <MenuItem fx:id="aboutButton" text="_About" onAction="#showInfo"/>
+                        <MenuItem id="infoButton" text="_Manual" onAction="#showInfo"/>
+                        <MenuItem fx:id="aboutButton" text="_About" onAction="#showAboutWindow"/>
                     </items>
                 </Menu>
             </menus>
