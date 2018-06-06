@@ -16,7 +16,7 @@
                 </Menu>
                 <Menu mnemonicParsing="true" text="_View">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Set Background" onAction="#changeBackground"/>
+                        <MenuItem mnemonicParsing="false" text="Set background" onAction="#changeBackground"/>
                         <MenuItem fx:id="setDefaultPreferencesButton" text="Set _default background"
                                   onAction="#setDefaultPreferences"/>
                     </items>

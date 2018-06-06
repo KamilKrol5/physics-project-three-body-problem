@@ -117,6 +117,18 @@ public class Controller {
         presetsBox.getItems().add("change orbit");
         presets.put("change orbit", changeOrbit);
         //
+        Body negativeMassBody1 = new Body(400, 150, 0, 0, 3.0e15);
+        Body negativeMassBody2 = new Body(200, 150, 0, 0, -2.0e15);
+        SimulationController.Preset negativeMass = new SimulationController.Preset(negativeMassBody1,negativeMassBody2);
+        presetsBox.getItems().add("negative mass");
+        presets.put("negative mass", negativeMass);
+        //
+        Body orbitsBody1 = new Body(300, 300, 0*Math.cos(Math.toRadians(0)), 0*Math.sin(Math.toRadians(0)), 5.0e56);
+        Body orbitsBody2 = new Body(400, 300, 10*Math.cos(Math.toRadians(90)), 10*Math.sin(Math.toRadians(90)), 5.0e25);
+        Body orbitsBody3 = new Body(450, 300, 15*Math.cos(Math.toRadians(-90)), 15*Math.sin(Math.toRadians(-90)), 5.0e9);
+        SimulationController.Preset orbits = new SimulationController.Preset(orbitsBody1,orbitsBody2,orbitsBody3);
+        presetsBox.getItems().add("orbits");
+        presets.put("orbits", orbits);
 //        Body cometBody1 = new Body(450, 400, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
 //        Body cometBody2 = new Body(250, 200, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
 //        Body cometBody3 = new Body(250, 230, 175*Math.cos(Math.toRadians(0)), 175*Math.sin(Math.toRadians(0)), 5.0e9);
@@ -136,14 +148,14 @@ public class Controller {
         //presetsBox.getItems().addAll(presets.keySet());
         //random
         addRandomPreset(3,"3 random");
-        addRandomPreset(5,"5 random");
+        addRandomPreset(10,"10 random");
     }
 
     private Collection<Body> randomBodies(int amount) {
         Random random = new Random();
         ArrayList<Body> bodies = new ArrayList<>(amount);
         for(int i=0;i<amount;i++){
-            bodies.add(new Body(random.nextInt(700),random.nextInt(600),random.nextDouble(),random.nextDouble(),4e15));
+            bodies.add(new Body(random.nextInt(700),random.nextInt(400),random.nextDouble(),random.nextDouble(),4e15));
         }
         return bodies;
     }
@@ -319,7 +331,7 @@ public class Controller {
         TextFormatter<Double> velocityValueTextFormatter = new TextFormatter<>(new DoubleStringConverter() {
             @Override
             public String toString(Double value) {
-                return String.format("%.0f", value);
+                return String.format(Locale.US, "%.3f", value);
             }
         });
         velocityValueField.setTextFormatter(velocityValueTextFormatter);
@@ -482,31 +494,32 @@ public class Controller {
         }
     }
 
-    public void showInfo(ActionEvent event) {
+    public void showInfo() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("About");
         Label contentText = new Label();
         contentText.setTextFill(Color.BLACK);
         contentText.setText("\nManual: \n\n" +
-                "Click 'start' to start simulation on default preset.\n" +
-                "Preset can be changed in box on menu panel.\n" +
-                "There are some presets given from authors but also users can create \n" +
-                "their own presets by clicking 'New preset...'. New presets can be edited\n" +
-                "in the panel on the right. In this panel existing bodies can be edited\n" +
-                "or deleted and new bodies can be added.\n\n" +
+                "Users can create their own presets by clicking 'New preset...'.\n" +
+                "New presets can be edited in the panel on the right.\n" +
+                "There existing bodies can be edited or deleted and new bodies \n" +
+                "can be added.\n\n" +
                 "Hints:\n" +
                 " ■ The velocity angle is in degrees not in radians.\n"+
                 " ■ For better looking effects it may be needed to set a huge mass.\n" +
-                " ■ User can use scientific notation.\n" +
-                " ■ Bodies added by user have random values.\n" +
-                " ■ Random presets are different for every launching of the program.\n" +
+                " ■ Users can use scientific notation.\n" +
+                " ■ Random presets are different every time user launches the program.\n" +
                 " ■ Presets can be changed only when simulation is paused or stopped.\n" +
-                " ■ Every body in current preset can be edited on the right panel\n" +
-                "only after stopping simulation. All typed changes will be seen\n" +
-                "after starting simulation.\n" +
-                " ■ Negative mass value is allowed. There is a preset showing that case.\n" +
-                " ■ If bodies get too close the force is so big that their velocity \n" +
-                "increases significantly. It may cause an effect of disappearing bodies.\n");
+                " ■ Every body in the current preset can be edited on the right panel\n" +
+                "only after stopping the simulation. All changes will be seen\n" +
+                "after starting the simulation.\n" +
+                " ■ Negative mass values are allowed.\n" +
+                " ■ Bodies are treated as material points. They can get so close\n" +
+                "to each other that they overlap on the screen and the force between\n" +
+                "them might get extremely large, which may cause the bodies\n" +
+                "to accelerate extremely quickly and fly off the screen.\n" +
+                "In extreme cases it may look as if they had just disappeared.\n"
+        );
         //🚽⚤☭●◉■💊🚑★☢★✦
         Pane dialogPane = new Pane();
         dialogPane.setPrefSize(405, 400);
