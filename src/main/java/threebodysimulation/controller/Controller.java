@@ -55,7 +55,9 @@ public class Controller {
         //---presets---
         SimulationController.Preset defaultPreset = defaultPreset();
         presetsBox.getItems().add("New preset...");
+        presetsBox.getItems().add("default");
         presets.put("default", defaultPreset);
+
         addPresets();
 
         //---presets combo-box handler
@@ -97,8 +99,8 @@ public class Controller {
         presetsBox.getItems().add("hexagon");
         presets.put("hexagon", hexagon);
         //
-        Body twoBodiesBody1 = new Body(550, 300, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
-        Body twoBodiesBody2 = new Body(350, 100, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
+        Body twoBodiesBody1 = new Body(350, 300, 10*Math.cos(Math.toRadians(140)), 10*Math.sin(Math.toRadians(140)), 5.0e16);
+        Body twoBodiesBody2 = new Body(150, 100, 100*Math.cos(Math.toRadians(-40)), 100*Math.sin(Math.toRadians(-40)), 5.0e15);
         SimulationController.Preset twoBodies = new SimulationController.Preset(twoBodiesBody1,twoBodiesBody2);
         presetsBox.getItems().add("2 bodies");
         presets.put("2 bodies", twoBodies);
@@ -123,9 +125,9 @@ public class Controller {
         presetsBox.getItems().add("negative mass");
         presets.put("negative mass", negativeMass);
         //
-        Body orbitsBody1 = new Body(300, 300, 0*Math.cos(Math.toRadians(0)), 0*Math.sin(Math.toRadians(0)), 5.0e56);
-        Body orbitsBody2 = new Body(400, 300, 10*Math.cos(Math.toRadians(90)), 10*Math.sin(Math.toRadians(90)), 5.0e25);
-        Body orbitsBody3 = new Body(450, 300, 15*Math.cos(Math.toRadians(-90)), 15*Math.sin(Math.toRadians(-90)), 5.0e9);
+        Body orbitsBody1 = new Body(400, 270, 0*Math.cos(Math.toRadians(0)), 0*Math.sin(Math.toRadians(0)), 5.0e16);
+        Body orbitsBody2 = new Body(600, 270, 0, -141, 5.0e11);
+        Body orbitsBody3 = new Body(600, 390, 80, 0, 5.0e5);
         SimulationController.Preset orbits = new SimulationController.Preset(orbitsBody1,orbitsBody2,orbitsBody3);
         presetsBox.getItems().add("orbits");
         presets.put("orbits", orbits);
